@@ -6,8 +6,8 @@ import random
 Q-learning learns to behave optimally by repeatedly interacting with the env.
 It learns the value of an action in a particular state called Q-values or Action-values
 Q(s,a) which is the immediate reward/penalty and estimate of the value of the next state.
-It does not require model of the env (model free) and it learns by taking random actions (off-policy)
-rather than following a policy (on-policy)
+It does not require model of the env (model free) and it learns by taking random actions which 
+is not the optimal policy being evaluated and improved (off-policy)
 """
 
 def train(env, qtable, max_steps):
