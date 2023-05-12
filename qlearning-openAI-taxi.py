@@ -28,7 +28,7 @@ def train(env, qtable, max_steps):
             if random.uniform(0,1) < epsilon:
                 action = env.action_space.sample() # explore, randomly sample from available actions
             else:
-                action = np.argmax(qtable[state,:]) # exploit, select action max future expecture reward
+                action = np.argmax(qtable[state,:]) # exploit, select action max future expected reward
                 
         new_state, reward, done, info = env.step(action) # take action and observe reward
         
