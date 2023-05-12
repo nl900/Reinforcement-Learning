@@ -15,8 +15,7 @@ def train(env, qtable, max_steps):
     epsilon = 0.9 # probability for exploration to update Q-table
     decay_rate= 0.0001 # for epsilon
     
-    # training variables
-    num_episodes = 10000
+    num_episodes = 10000 # training episodes
     
     # training
     for episode in range(num_episodes):
