@@ -2,6 +2,12 @@ import gym
 import numpy as np
 import random
 
+"""
+Q Learning is a model free (not require model of the env) RL algorithm where 
+it learns the value of an action in a particular state.
+It's off-policy because policy is not needed as it learns the Q(s,a) function
+by taking random actions
+"""
 
 def train(env, qtable, max_steps):
     
