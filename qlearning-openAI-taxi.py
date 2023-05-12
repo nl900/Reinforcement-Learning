@@ -8,6 +8,8 @@ it learns the value of an action in a particular state.
 It's off-policy because policy is not needed as it learns the Q(s,a) function
 by taking random actions. The behaviour policy to select actions during exploration 
 is different from the optimal policy that's being evaluated and improved.
+Whereas on-policy the Q(s,a) function is learned from actions taken using current 
+policy 𝜋(a|s)
 """
 
 def train(env, qtable, max_steps):
