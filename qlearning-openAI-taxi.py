@@ -7,7 +7,7 @@ Q Learning is a model free (not require model of the env) RL algorithm where
 it learns the value of an action in a particular state.
 It's off-policy because policy is not needed as it learns the Q(s,a) function
 by taking random actions. The behaviour policy to select actions during exploration 
-is different from the optimal policy that's evaluated and improved.
+is different from the optimal policy that's being evaluated and improved.
 """
 
 def train(env, qtable, max_steps):
