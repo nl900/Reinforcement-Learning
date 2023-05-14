@@ -51,20 +51,6 @@ def train(env, qtable):
     print("Training complete")
     print(qtable)
 
-def run(env, qtable):
-    state = env.reset()
-    done = False
-    
-    while not done:
-        action = np.argmax(qtable[state,:]) # take action that max future expected reward
-        new_state, reward, done, info = env.step(action) # perform action on the environment
-        
-        
-        state = new_state
-        env.render() # print the new state
-
-    env.close() # end this instance of the taxi environment
-
 
 if __name__== "__main__":
     env = gym.make('Taxi-v3')  # create Taxi environment
@@ -77,4 +63,3 @@ if __name__== "__main__":
     qtable = np.zeros([env.observation_space.n, env.action_space.n])
    
     train(env, qtable)
-    run(env, qtable)
