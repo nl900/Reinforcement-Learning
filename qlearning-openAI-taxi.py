@@ -28,32 +28,27 @@ def train(env, qtable, max_steps):
     for episode in range(num_episodes):
         state = env.reset() # create a new instance of taxi, and get the initial state
         
-        done = False
-        
         for s in range(max_steps):
             if random.uniform(0,1) < epsilon:
                 action = env.action_space.sample() # explore, randomly sample from available actions
             else:
-                action = np.argmax(qtable[state,:]) # exploit, select action max future expected reward
+                action = np.argmax(qtable[state,:]) # exploit, select best known action
                 
-        new_state, reward, done, info = env.step(action) # take action and observe reward
+            new_state, reward, done, info = env.step(action) # take action and observe reward
         
-        # Q-learning
-        # Q(s,a) := Q(s,a) + learning_rate * (reward + discount_rate * max Q(s',a') - Q(s,a))
-        qtable[state,action] = qtable[state,action] + learning_rate * (reward + discount_rate * np.max(qtable[new_state,:])-qtable[state,action])
+            # Q-learning
+            # Q(s,a) := Q(s,a) + learning_rate * (reward + discount_rate * max Q(s',a') - Q(s,a))
+            qtable[state,action] = qtable[state,action] + learning_rate * (reward + discount_rate * np.max(qtable[new_state,:])-qtable[state,action])
         
-        state = new_state # update new state
+            state = new_state # update new state
         
-        if done == True: break
-        
-    epsilon = np.exp(-decay_rate*episode) # epsilon decreases exponentially so the agent explores less over time
+        epsilon = np.exp(-decay_rate*episode) # epsilon decreases exponentially so the agent explores less over time
     
     print("Training complete")
     print(qtable)
 
 def test(env, qtable, max_steps):
     state = env.reset()
-    done = False
     rewards = 0
     
     for s in range(max_steps):
