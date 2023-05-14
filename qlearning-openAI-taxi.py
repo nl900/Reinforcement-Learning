@@ -10,7 +10,7 @@ It does not require model of the env (model free) and it learns by taking random
 is not the optimal policy being evaluated and improved (off-policy)
 """
 
-def train(env, qtable, num_episodes):
+def train(env, qtable):
     def selectAction(state):
         if random.uniform(0,1) < epsilon:
             return env.action_space.sample() # explore, randomly sample from available actions
@@ -20,10 +20,8 @@ def train(env, qtable, num_episodes):
     # hyperparameters
     learning_rate = 0.001  
     discount_rate = 0.8  # how much to weigh future rewards
-    
-    
-    # training variables
-    num_episodes = 10000
+  
+    num_episodes = 10000    # training variables
     
     # exploration-exploitation tradeoff
     # during exploitation, the agent select the action with the highest Q-value
@@ -53,17 +51,16 @@ def train(env, qtable, num_episodes):
     print("Training complete")
     print(qtable)
 
-def evaluate(env, qtable):
+def run(env, qtable):
     state = env.reset()
-    rewards = 0
-    total_steps = 100
-    for s in range(total_steps):
-        print("Step {}".format(s+1))
-        
+    done = False
+    
+    while not done:
         action = np.argmax(qtable[state,:]) # take action that max future expected reward
         new_state, reward, done, info = env.step(action) # perform action on the environment
-        rewards += reward
         
+        
+        state = new_state
         env.render() # print the new state
 
     env.close() # end this instance of the taxi environment
@@ -80,4 +77,4 @@ if __name__== "__main__":
     qtable = np.zeros([env.observation_space.n, env.action_space.n])
    
     train(env, qtable)
-    evaluate(env, qtable)
+    run(env, qtable)
