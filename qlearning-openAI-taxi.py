@@ -41,7 +41,7 @@ def train(env, qtable):
             new_state, reward, done, _ = env.step(action) # take action and observe reward
         
             #Q-learning
-            # Q(s,a) := Q(s,a) + learning_rate * (reward + discount_rate * max Q(s',a') - Q(s,a))
+            # Q(s,a) := Q(s,a) + learning_rate * (reward + discount_rate * max Q(s',a) - Q(s,a))
             qtable[state,action] = qtable[state,action] + learning_rate * (reward + discount_rate * np.max(qtable[new_state,:])-qtable[state,action])
         
             state = new_state # update new state
