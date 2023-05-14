@@ -10,7 +10,7 @@ It does not require model of the env (model free) and it learns by taking random
 is not the optimal policy being evaluated and improved (off-policy)
 """
 
-def train(env, qtable, max_steps):
+def train(env, qtable, num_episodes):
     
     # hyperparameters
     learning_rate = 0.1  
@@ -28,7 +28,7 @@ def train(env, qtable, max_steps):
     for episode in range(num_episodes):
         state = env.reset() # create a new instance of taxi, and get the initial state
         
-        for s in range(max_steps):
+        while not done:
             if random.uniform(0,1) < epsilon:
                 action = env.action_space.sample() # explore, randomly sample from available actions
             else:
@@ -40,19 +40,21 @@ def train(env, qtable, max_steps):
             # Q(s,a) := Q(s,a) + learning_rate * (reward + discount_rate * max Q(s',a') - Q(s,a))
             qtable[state,action] = qtable[state,action] + learning_rate * (reward + discount_rate * np.max(qtable[new_state,:])-qtable[state,action])
         
-            state = new_state # update new state
             if done: break
-        
+                
+            state = new_state # update new state
+            
+
         epsilon = np.exp(-decay_rate*episode) # epsilon decreases exponentially so the agent explores less over time
     
     print("Training complete")
     print(qtable)
 
-def evaluate(env, qtable, max_steps):
+def evaluate(env, qtable):
     state = env.reset()
     rewards = 0
-    
-    for s in range(max_steps):
+    total_steps = 100
+    for s in range(total_steps):
         print("Step {}".format(s+1))
         
         action = np.argmax(qtable[state,:]) # take action that max future expected reward
@@ -73,6 +75,6 @@ if __name__== "__main__":
     # column represents the action 
     # each cell is the Q-value for the state-action pair. 
     qtable = np.zeros([env.observation_space.n, env.action_space.n])
-    max_steps = 800
-    train(env, qtable, max_steps)
-    evaluate(env, qtable, max_steps)
+   
+    train(env, qtable)
+    evaluate(env, qtable)
