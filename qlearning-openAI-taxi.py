@@ -11,42 +11,45 @@ is not the optimal policy being evaluated and improved (off-policy)
 """
 
 def train(env, qtable, num_episodes):
+    def selectAction(state):
+        if random.uniform(0,1) < epsilon:
+            return env.action_space.sample() # explore, randomly sample from available actions
+        else:
+            return np.argmax(qtable[state])  # exploit, select action max future expecture reward
     
     # hyperparameters
-    learning_rate = 0.1  
+    learning_rate = 0.001  
     discount_rate = 0.8  # how much to weigh future rewards
+    
+    
+    # training variables
+    num_episodes = 10000
     
     # exploration-exploitation tradeoff
     # during exploitation, the agent select the action with the highest Q-value
     # over time, the agen will explore less and start exploiting
     epsilon = 0.9 # probability for exploration to update Q-table
-    decay_rate= 0.0001 # for epsilon
-    
-    num_episodes = 10000 # training episodes
+    decay_rate= 0.epsilon / (num_episodes/2)
     
     # training
     for episode in range(num_episodes):
         state = env.reset() # create a new instance of taxi, and get the initial state
         
-        while not done:
-            if random.uniform(0,1) < epsilon:
-                action = env.action_space.sample() # explore, randomly sample from available actions
-            else:
-                action = np.argmax(qtable[state,:]) # exploit, select best known action
-                
-            new_state, reward, done, info = env.step(action) # take action and observe reward
+        done = False
         
-            # Q-learning
+        while not done:
+            action = selectAction(state)
+                
+            new_state, reward, done, _ = env.step(action) # take action and observe reward
+        
+            #Q-learning
             # Q(s,a) := Q(s,a) + learning_rate * (reward + discount_rate * max Q(s',a') - Q(s,a))
             qtable[state,action] = qtable[state,action] + learning_rate * (reward + discount_rate * np.max(qtable[new_state,:])-qtable[state,action])
         
-            if done: break
-                
             state = new_state # update new state
-            
-
-        epsilon = np.exp(-decay_rate*episode) # epsilon decreases exponentially so the agent explores less over time
-    
+        
+        
+        epsilon = max(0.1, epsilon-decay_rate) # epsilon decreases exponentially so the agent explores less over time
     print("Training complete")
     print(qtable)
 
