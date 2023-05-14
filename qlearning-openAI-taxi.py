@@ -41,13 +41,14 @@ def train(env, qtable, max_steps):
             qtable[state,action] = qtable[state,action] + learning_rate * (reward + discount_rate * np.max(qtable[new_state,:])-qtable[state,action])
         
             state = new_state # update new state
+            if done: break
         
         epsilon = np.exp(-decay_rate*episode) # epsilon decreases exponentially so the agent explores less over time
     
     print("Training complete")
     print(qtable)
 
-def test(env, qtable, max_steps):
+def evaluate(env, qtable, max_steps):
     state = env.reset()
     rewards = 0
     
@@ -74,4 +75,4 @@ if __name__== "__main__":
     qtable = np.zeros([env.observation_space.n, env.action_space.n])
     max_steps = 800
     train(env, qtable, max_steps)
-    test(env, qtable, max_steps)
+    evaluate(env, qtable, max_steps)
